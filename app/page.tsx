@@ -2,8 +2,25 @@
 import { Applicant, ApplicantForm } from "@/components/forms/applicant-form";
 import Card from "@/components/global/card";
 import { ConfirmationDialog } from "@/components/global/confirmation-dialog";
+import { NoDataFound } from "@/components/global/no-data-found";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { MdOutlineDeleteForever } from "react-icons/md";
+
+const itemVariant = {
+  hidden: {
+    y: "-50vw",
+    opacity: 0,
+    scale: 0.5
+  },
+
+  show: {
+    transition: { ease: "easeInOut", duration: 0.5 },
+    opacity: 1,
+    scale: 1,
+    y: 0
+  }
+};
 
 export default function Home() {
   const [list, setList] = useState<Applicant[]>([]);
@@ -77,29 +94,43 @@ export default function Home() {
         <ApplicantForm onSubmit={handleFormSubmit} />
 
         {/* Display the list of applicants */}
-        {list.map((item: Applicant) => (
-          <Card
-            onPrimaryChange={amount === 1 ? undefined : handlePrimaryChange}
-            className="mb-2"
-            avatar={`https://ui-avatars.com/api/?background=random&name=${item.firstName}+${item.lastName}`}
-            key={item.id}
-            id={item.id}
-            title={`${item.firstName} ${item.lastName}`}
-            content={item.email}
-            checked={!!item.isPrimary}
-            menuOptions={
-              amount === 1
-                ? undefined // If there is only one item, don't show the menu
-                : [
-                    {
-                      label: "Delete",
-                      onClick: () => openConfirmDeleteApplicant(item),
-                      startIcon: <MdOutlineDeleteForever size={15} />
-                    }
-                  ]
-            }
-          />
-        ))}
+        {amount > 0 ? (
+          <>
+            {list.map((item: Applicant) => (
+              <motion.div
+                key={item.id}
+                variants={itemVariant}
+                initial="hidden"
+                animate="show"
+              >
+                <Card
+                  onPrimaryChange={
+                    amount === 1 ? undefined : handlePrimaryChange
+                  }
+                  className="mb-2"
+                  avatar={`https://ui-avatars.com/api/?background=random&name=${item.firstName}+${item.lastName}`}
+                  id={item.id}
+                  title={`${item.firstName} ${item.lastName}`}
+                  content={item.email}
+                  checked={!!item.isPrimary}
+                  menuOptions={
+                    amount === 1
+                      ? undefined // If there is only one item, don't show the menu
+                      : [
+                          {
+                            label: "Delete",
+                            onClick: () => openConfirmDeleteApplicant(item),
+                            startIcon: <MdOutlineDeleteForever size={15} />
+                          }
+                        ]
+                  }
+                />
+              </motion.div>
+            ))}
+          </>
+        ) : (
+          <NoDataFound />
+        )}
       </div>
       <ConfirmationDialog
         open={isConfirmDeleteApplicantOpened}

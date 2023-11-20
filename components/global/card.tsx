@@ -42,7 +42,7 @@ const itemMenuVariant = {
 };
 
 const variants = cva(
-  "flex items-center p-4 transition duration-300 ease-in-out border-2 hover:bg-tertiary-800 bg-tertiary-900 text-white",
+  "flex items-center p-4 transition duration-300 ease-in-out border-2 hover:bg-basic-800 bg-basic-900 text-white",
   {
     variants: {
       checked: {
@@ -112,7 +112,7 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <>
-      <div className={`${className} ${classes} `}>
+      <div className={`${className} ${classes} z-10`}>
         {avatar && (
           <div className={`flex-shrink-0`}>
             <Image
@@ -168,7 +168,7 @@ const Card: React.FC<CardProps> = ({
                   animate="show"
                   exit="hidden"
                   id="dropdown"
-                  className={`absolute z-10 bg-tertiary-900 border border-tertiary-600 divide-y divide-tertiary-200 rounded shadow w-44 top-full right-2`}
+                  className={`absolute z-50 bg-tertiary-900 border border-tertiary-600 divide-y divide-tertiary-200 rounded shadow w-44 top-2 right-4`}
                 >
                   <ul
                     className="py-2 text-sm text-gray-700 dark:text-gray-200"
